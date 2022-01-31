@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { categoryState, saveToDosToLocalStorage, toDoState } from "../atoms";
+import { currentCategoryState, saveToDosToLocalStorage, toDoState } from "../atoms";
 
 interface IForm {
   toDo: string;
@@ -8,7 +8,7 @@ interface IForm {
 
 const CreateToDo = () => {
   const setToDos = useSetRecoilState(toDoState);
-  const category = useRecoilValue(categoryState);
+  const currentCategory = useRecoilValue(currentCategoryState);
 
   const { 
     register , handleSubmit, setValue
@@ -18,7 +18,7 @@ const CreateToDo = () => {
     // Add New ToDo in original toDos array
     setToDos((oldToDos) => {
       const newToDos = [
-        { text: toDo, id: Date.now(), category }, 
+        { text: toDo, id: Date.now(), category: currentCategory }, 
         ...oldToDos
       ];
 

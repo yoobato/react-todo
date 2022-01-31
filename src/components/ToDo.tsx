@@ -1,9 +1,10 @@
 import React from "react";
-import { useSetRecoilState } from "recoil";
-import { Categories, IToDo, saveToDosToLocalStorage, toDoState } from "../atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { categorySelector, IToDo, saveToDosToLocalStorage, toDoState } from "../atoms";
 
-const ToDo = ({ text, category, id }: IToDo) => {
+const ToDo = ({ text, id }: IToDo) => {
   const setToDos = useSetRecoilState(toDoState);
+  const categories = useRecoilValue(categorySelector);
 
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
@@ -11,8 +12,7 @@ const ToDo = ({ text, category, id }: IToDo) => {
     } = event;
     setToDos((oldToDos) => {
       const oldToDoIndex = oldToDos.findIndex((toDo) => toDo.id === id);
-      // as any는 사용을 지양해야함... 그래서 onClick에 파라미터 넣어서 보내는게 좋다.
-      const newToDo = { text, id, category: name as any };
+      const newToDo = { text, id, category: name };
 
       // Change oldToDo to newToDo
       const newToDos = [
@@ -45,9 +45,9 @@ const ToDo = ({ text, category, id }: IToDo) => {
   return (
     <li>
       <span>{text}</span>
-      {category !== Categories.DOING && <button name={Categories.DOING} onClick={onClick}>Doing</button>}
-      {category !== Categories.TO_DO && <button name={Categories.TO_DO} onClick={onClick}>To Do</button>}
-      {category !== Categories.DONE && <button name={Categories.DONE} onClick={onClick}>Done</button>}
+      {categories?.map((aCategory) => (
+        <button key={aCategory} name={aCategory} onClick={onClick}>{aCategory}</button>
+      ))}
       <button onClick={onDeleteClick}>Delete</button>
     </li>
   );
