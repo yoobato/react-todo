@@ -19,12 +19,17 @@ const ToDoList = () => {
       <h1>To Dos</h1>
       <hr />
       <CreateCategory />
+      <ul>
+        {categories?.map((category) => (
+          <li key={category}>{category}</li>
+        ))}
+      </ul>
+      <hr />
       <select value={currentCategory} onInput={onInput}>
         {categories?.map((category) => (
           <option key={category} value={category}>{category}</option>
         ))}
       </select>
-      <hr />
       <CreateToDo />
       <ul>
         {toDos?.map((toDo) => (

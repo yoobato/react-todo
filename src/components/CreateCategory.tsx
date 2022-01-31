@@ -16,8 +16,8 @@ const CreateCategory = () => {
   const handleValid = ({ category }: IForm) => {
     setCategories((oldCategories) => {
       const newCategories = [
+        ...oldCategories,
         category,
-        ...oldCategories
       ];
 
       saveCategoriesToLocalStorage(newCategories);
