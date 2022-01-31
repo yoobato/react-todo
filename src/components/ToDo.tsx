@@ -1,6 +1,6 @@
 import React from "react";
 import { useSetRecoilState } from "recoil";
-import { Categories, IToDo, toDoState } from "../atoms";
+import { Categories, IToDo, saveToDosToLocalStorage, toDoState } from "../atoms";
 
 const ToDo = ({ text, category, id }: IToDo) => {
   const setToDos = useSetRecoilState(toDoState);
@@ -14,23 +14,31 @@ const ToDo = ({ text, category, id }: IToDo) => {
       // as any는 사용을 지양해야함... 그래서 onClick에 파라미터 넣어서 보내는게 좋다.
       const newToDo = { text, id, category: name as any };
 
-      // Chagne oldToDo to newToDo
-      return [
+      // Change oldToDo to newToDo
+      const newToDos = [
         ...oldToDos.slice(0, oldToDoIndex),
         newToDo,
-        ...oldToDos.slice(oldToDoIndex + 1)
-      ]
+        ...oldToDos.slice(oldToDoIndex + 1) 
+      ];
+
+      saveToDosToLocalStorage(newToDos);
+
+      return newToDos;
     });
   };
 
   const onDeleteClick = () => {
     setToDos((oldToDos) => {
       const oldToDoIndex = oldToDos.findIndex((toDo) => toDo.id === id);
-      // Chagne oldToDo to newToDo
-      return [
+
+      const newToDos = [
         ...oldToDos.slice(0, oldToDoIndex),
         ...oldToDos.slice(oldToDoIndex + 1)
-      ]
+      ];
+
+      saveToDosToLocalStorage(newToDos);
+
+      return newToDos;
     });
   };
 

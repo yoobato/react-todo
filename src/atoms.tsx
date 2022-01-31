@@ -18,15 +18,25 @@ export const categoryState = atom<Categories>({
   default: Categories.TO_DO,
 });
 
-// TODO: localStorage 사용해서 toDoState 저장해놨다가, 어플리케이션 실행시 불러오자.
+// load & save with local storage
+const TODOS_KEY = "todos";
+
+const loadToDosFromLocalStorage = () => {
+  const savedToDosJSON = localStorage.getItem(TODOS_KEY);
+  return savedToDosJSON ? JSON.parse(savedToDosJSON as string) : [];
+};
+
+export const saveToDosToLocalStorage = (toDos: IToDo[]) => {
+  localStorage.setItem(TODOS_KEY, JSON.stringify(toDos));
+};
 
 export const toDoState = atom<IToDo[]>({
   key: "toDo",
-  default: [],
+  default: loadToDosFromLocalStorage(),
 });
 
 // selector를 사용하면 atom의 output을 변형할 수 있다.
-export const toDoSelector = selector({
+export const toDoSelector = selector<IToDo[]>({
   key: "toDoSelector",
   get: ({ get }) => {
     // get 함수를 사용하면 atom을 selector 내부로 가져올 수 있다.
